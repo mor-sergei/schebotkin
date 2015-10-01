@@ -6,16 +6,13 @@ cfgDir=`pwd`"/"
 cfgFile="default.cfg"
 CONFIGURATION=$cfgDir$cfgFile
 
-OK_CODES=(200 201 204 301)
-ERR_CODES=""
-
-function getConfig()
+getConfig()
 {
 	echo "Configure from: "${@}
 	source ${@}
 }
 
-function getParam() 
+getParam() 
 {
 	for args in ${@} 
 		do 
@@ -34,27 +31,36 @@ function getParam()
 	if [ $DEFAULT ]; then  ((step++));echo "Your parameter $step are wrong"; fi
 }
 
-function getPortStatus()
+getPortStatus()
 {	
 	local url=$1
 	local port=$2
 	echo `curl -s -o /dev/null -w "%{http_code}" $url:$port`
-	return
 }
 
-function checkUAnswer
+function checkUAnswer()
 {
-	local answer=$1
-	local arr_len=${#OK_CODES[@]}
-	local diff=0
-	for (( i=0; i<${arr_len}; i++ ));
+	local answer=$1; echo "Server answer: $answer"
+	local oarr_len=${#OK_CODES[@]}
+	local earr_len=${#OK_CODES[@]}
+	local ok_code=0
+	local err_code=0
+
+	for (( i=0; i<${oarr_len}; i++ ));
 		do
-  			#echo ${OK_CODES[$i]}
-  			if [ $answer -eq ${OK_CODES[$i]} ]; then ((diff++)); fi
+  			#echo OK ${OK_CODES[$i]}
+  			if [ $answer -eq ${OK_CODES[$i]} ]; then ((ok_code++)); fi
 		done
-	if [ $diff -ne 0 ]
-	 then return 1
-		else return 0 
+
+        for (( i=0; i<${earr_len}; i++ ));
+                do
+                        #echo ERR ${ERR_CODES[$i]}
+                        if [ $answer -eq ${ERR_CODES[$i]} ]; then ((err_code++)); fi
+                done
+	
+	if [ $ok_code -eq 1 ]; then return 0
+	elif [ $err_code -eq 1 ]; then return 1
+	else return 3
 	fi
 }
 
