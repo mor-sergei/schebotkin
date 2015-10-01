@@ -1,0 +1,5 @@
+module "dc2-keypair" {
+  source = "./terraform/openstack/keypair"
+  public_key = "~/.ssh/id_rsa.pub"
+  keypair_name = "kube"
+}

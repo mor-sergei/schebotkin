@@ -1,0 +1,12 @@
+#!/bin/bash
+
+pBASE=$HOME"/"projects
+pSUFIX=schebotkin
+pGREET=README.md
+pPATH=$pBASE"/"$1"/"$pSUFIX
+
+#echo "Moving to the branch dir"
+#cmove $PATH 
+cd $pPATH
+echo `pwd`
+# -e $GREET ] && echo "The moving done" || echo "The moving fault"
