@@ -5,7 +5,7 @@
 cfgDir=`pwd`"/"
 cfgFile="default.cfg"
 CONFIGURATION=$cfgDir$cfgFile
-DEBUG=3
+DEBUG=1
 
 fPrint() 
 {
@@ -28,7 +28,7 @@ getParam()
 		do 
 			case $args in
 				-c=* | --configure=*)
-				CONFIGURATION="${args#*=}"
+				CONFIGURATION="${args#*=}.cfg"
 				((step++))
 				shift
     			;;
@@ -36,13 +36,20 @@ getParam()
 				MOD_INS="${args#*=}.mod"
 				shift
 			;;
-
+			
+				-mc=*)
+				CONFIGURATION="${args#*=}.cfg"
+				MOD_INS="${args#*=}.mod"
+				fPrint "CFG: "$CONFIGURATION
+				fPrint "MOD: "$MOD_INS
+				shift
+			;;
     			*) 
-					DEFAULT=true
+					#DEFAULT=true
 				;;
 			esac
 		done
-	[[ $DEFAULT ]] &&  ((step++));echo "Your parameter $step are wrong" 
+#	[[ $DEFAULT ]] &&  ((step++));echo "Your parameter $step are wrong" 
 }
 
 function modStarter()
@@ -52,7 +59,7 @@ function modStarter()
 
 	if [ -n $fName ]  
 		then 
-			fPrint "Module attaced: $MODULES$fName" 
+			fPrint "Module attached: $MODULES$fName" 
 			source $MODULES$fName
 		else 
 			fPrint "No any module has found" 
@@ -63,5 +70,3 @@ function modStarter()
 getParam ${@}
 getConfig ${CONFIGURATION}
 modStarter $MOD_INS
-
-
