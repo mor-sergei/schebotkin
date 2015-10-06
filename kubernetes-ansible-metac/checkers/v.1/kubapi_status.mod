@@ -16,7 +16,7 @@ getPortStatus()
 	local lRequest="$furl$ffunct"
 	fPrint "Request: "$lRequest
 	#curl -k -I -H "Authorization: Bearer $TOKEN" $lRequest 2>/dev/null | head -n 1 | cut -d$' ' -f2
-	local lAnswer=`curl -k -I -H "Authorization: Bearer $TOKEN" $lRequest 2>/dev/null | head -n 1 | cut -d$' ' -f2`
+	local lAnswer=`curl -k -I -l -H "Authorization: Bearer $TOKEN" $lRequest 2>/dev/null | head -n 1 | cut -d$' ' -f2`
 	ANSW=$lAnswer
 }
 
@@ -43,7 +43,6 @@ function checkUAnswer()
 for CHK in ${SERVICES[*]}; do 
 	getPortStatus $URL $CHK
 	checkUAnswer $ANSW
-#	fPrint "THE RES: $?"
 	RES=$?
 	ST_CHECK=$((ST_CHECK+RES))
 done

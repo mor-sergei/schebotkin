@@ -5,7 +5,7 @@
 cfgDir=`pwd`"/"
 cfgFile="default.cfg"
 CONFIGURATION=$cfgDir$cfgFile
-DEBUG=1
+DEBUG=3
 
 fPrint() 
 {
