@@ -10,6 +10,8 @@ getSystemStatus()
 	SRV_ANSWER=`ssh -t -q $lServer "sudo systemctl status $lSystem" | head -3 | tail -1 | cut -d':' -f2 | cut -d' ' -f2`
 }
 
+checkingStatus()
+{
 for CHK in  ${ASYSTEMD[*]}; do
 	getSystemStatus $SRV_NAME $CHK
 	fPrint "STATUS $CHK: $SRV_ANSWER"
@@ -17,6 +19,10 @@ for CHK in  ${ASYSTEMD[*]}; do
 		ST_CHECK=$((ST_CHECK+1)) 
 	fi
 done
+}
 
+ST_CHECK=0
+
+checkingStatus
 fPrint "THE RES: $ST_CHECK"
 [[ $ST_CHECK -eq 0 ]] && exit 0 || exit 1
