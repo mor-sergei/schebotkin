@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash 
 # Developed by Sergii Chebotkin 28.09.2015 
 # Mail: sergii.chebotkin@mail.ru
 

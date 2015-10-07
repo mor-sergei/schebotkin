@@ -7,21 +7,40 @@
 # POD_NAME : Test Pod name
 
 
+ip2dec () 
+{
+    local a b c d ip=$@
+    IFS=. read -r a b c d <<< "$ip"
+    printf '%d\n' "$((a * 256 ** 3 + b * 256 ** 2 + c * 256 + d))"
+}
+
 function getSystemStatus()
 {	
 	local lName=$1 # username@ip/name of server
 	local lBox=$2  # Pod name
-	local lAnswer=$(ssh -q -t $lName kubectl get pods $lBox )
+	local lAnswer=$(ssh -q -t $lName kubectl get pods $lBox) 
 
 	echo $lAnswer
 }
-
+ 
 function checkingStatus()
 {
 	local lAnswer=$1
 	# fPrint "checkingStatus: $lAnswer "
-	[[ "$lAnswer" == *Error* ]] && echo 1 | echo 0
+	[[ "$lAnswer" == *Error* ]] && echo true || echo false
 	
+}
+
+function getDnsStatus()
+{
+	local lServ=$1 
+	local lPodName=$2
+	local lDnsName=$3
+	local lDnsIp=$4
+	local lAnswer=`ssh -q -t $lServ kubectl exec $lPodName -- nslookup $lDnsName | tail -1 | cut -d':' -f2 | tr '\r' '\n'`
+	ip_one=`ip2dec $lAnswer`
+	ip_two=`ip2dec $lDnsIp`
+	[[ $ip_one -eq $ip_two ]] && echo true || echo false
 }
 
 testCR()
@@ -30,12 +49,15 @@ testCR()
 	local lFile=$2
 	fPrint "CPY: $lServ$lFile"
 	scp $lFile $lServ:./ >/dev/null 2>&1
-	ssh -q -t $lServ kubectl create -f $lFile
+	ssh -q -t $lServ kubectl create -f $lFile >/dev/null 2>&1
 }
 
 ANSW=`getSystemStatus $SRV_NAME $POD_NAME`
-fPrint "ANSWER: $ANSW"
-[[ $(checkingStatus $ANSW) ]] && testCR $SRV_NAME $FILECP || fPrint "Already existed"
+#fPrint "ANSWER: $ANSW"
+[[ $(checkingStatus $ANSW) = true ]] && testCR $SRV_NAME $FILECP || fPrint "Already existed"
+sleep 5 
+ST_CHECK=`getDnsStatus $SRV_NAME $POD_NAME $DNS_NAME $DNS_IP`
+fPrint "THE RES: $ST_CHECK"
 
+[[ $ST_CHECK == true ]] && exit 0 || exit 1
 
-# fPrint "THE RES: $ST_CHECK"
