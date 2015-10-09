@@ -55,7 +55,7 @@ testCR()
 ANSW=`getSystemStatus $SRV_NAME $POD_NAME`
 #fPrint "ANSWER: $ANSW"
 [[ $(checkingStatus $ANSW) = true ]] && testCR $SRV_NAME $FILECP || fPrint "Already existed"
-sleep 5 
+sleep 6 
 ST_CHECK=`getDnsStatus $SRV_NAME $POD_NAME $DNS_NAME $DNS_IP`
 fPrint "THE RES: $ST_CHECK"
 

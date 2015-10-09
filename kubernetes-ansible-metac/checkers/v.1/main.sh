@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash  
 # Developed by Sergii Chebotkin 28.09.2015 
 # Mail: sergii.chebotkin@mail.ru
 
@@ -44,12 +44,23 @@ getParam()
 				fPrint "MOD: "$MOD_INS
 				shift
 			;;
-    			*) 
-					#DEFAULT=true
-				;;
+			
+				--*)
+				CONFIGURATION="${args#*--}.cfg"
+                                MOD_INS="${args#*--}.mod"
+                                fPrint "CFG: "$CONFIGURATION
+                                fPrint "CFG: "$CONFIGURATION
+				shift
+
+			;;
+    				*)
+				echo "[WRONG PARAMITER]" 
+				break
+				exit 1
+				
+			;;
 			esac
 		done
-#	[[ $DEFAULT ]] &&  ((step++));echo "Your parameter $step are wrong" 
 }
 
 function modStarter()
@@ -67,6 +78,17 @@ function modStarter()
 	fi
 }
 
+function chkMod()
+{
+
+	local lmod="$1.mod"
+	[[ -e $lmod ]] && echo TRUE || echo FALSE
+
+}
+
+# Main section
+
 getParam ${@}
+[[ $? -eq 1 ]] && exit 1
 getConfig ${CONFIGURATION}
 modStarter $MOD_INS
