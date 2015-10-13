@@ -1,0 +1,16 @@
+# https://github.com/GoogleCloudPlatform/kubernetes/tree/v1.0.1/cluster/addons/dns
+# busybox.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - image: busybox
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
