@@ -1,0 +1,4 @@
+#!/bin/bash
+# OpenStack API credentials
+export OS_USERNAME={{ DEP_0_SPEC_PROVIDER_0_SPEC_AUTH_USERNAME }}
+export OS_PASSWORD={{ DEP_0_SPEC_PROVIDER_0_SPEC_AUTH_PASSWORD }}
