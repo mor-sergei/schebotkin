@@ -79,7 +79,11 @@ ${POST_DEPLOY_PRIVATE}/multi-main.sh --path=${POST_DEPLOY_PRIVATE} --sysctl_stat
 if [ "$?" -eq "0" ]
  then echo "--------------[CHECK COMPLETED SUCCESSFULY]-----------"
   else echo "------------[CHECK HAS FAILED]-----------------------"
+  exit 1
 fi
+
+echo 
+
 #-----------------------------MASTERS GENERATION------------------------------------------------------------------
 
 #-----------------------------NODES GENERATION--------------------------------------------------------------------
@@ -112,5 +116,6 @@ ${POST_DEPLOY_PRIVATE}/multi-main.sh --path=${POST_DEPLOY_PRIVATE} --sysctl_stat
 if [ "$?" -eq "0" ]
  then echo "--------------[CHECK COMPLETED SUCCESSFULY]-----------"
   else echo "------------[CHECK HAS FAILED]-----------------------"
+  exit 1
 fi
 #-----------------------------NODES GENERATION--------------------------------------------------------------------
